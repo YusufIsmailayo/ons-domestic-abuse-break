@@ -6,7 +6,7 @@ domestic abuse prevalence and, in the same release, said it is too early to read
 because the survey changed in the same period. I wanted every figure confirmed against the ONS's
 own tables before writing a word.
 
-**Status: reconciliation gate PASSES (26 of 26 blocking checks). Tables built. No chart, no article yet.**
+**Status: reconciliation gate PASSES (26 of 26 blocking checks). Tables and chart built. No article yet.**
 
 ## The ONS's assessment, which everything here is held to
 
@@ -21,12 +21,12 @@ bulletin snapshot.
 ```
 pip install -r requirements.txt
 cd notebooks
-jupyter nbconvert --to notebook --execute --inplace 01_assemble_tables.ipynb 02_reconciliation_gate.ipynb 03_own_break.ipynb
+jupyter nbconvert --to notebook --execute --inplace 01_assemble_tables.ipynb 02_reconciliation_gate.ipynb 03_own_break.ipynb 04_chart.ipynb
 ```
 
 `02_reconciliation_gate.ipynb` raises on any failed blocking check, so a scripted run exits non-zero.
-It writes `data/processed/gate_status.json` with hashes of the two tables. The chart (still to come)
-will refuse to run unless those hashes match.
+It writes `data/processed/gate_status.json` with hashes of the two tables, and `04_chart` refuses to
+run unless those hashes match.
 
 The notebooks are generated from `src/build_notebooks.py`; shared readers are in `src/common.py`.
 
@@ -35,6 +35,7 @@ The notebooks are generated from `src/build_notebooks.py`; shared readers are in
 | `01_assemble_tables` | source manifest with SHA-256; Table 1 (new questions) and Table 2 (old questions) as separate Parquet files |
 | `02_reconciliation_gate` | rebuilds 9.6%, 7.8%, the partner and family figures, around 4.7m and around 3.8m; checks significance flags and bulletin wording; checks the two bases can't be joined |
 | `03_own_break` | recomputes, from my Cancer Waiting Times pipeline, the rows I set aside at NHS England's October 2023 standards change |
+| `04_chart` | the article's chart (`charts/domestic_abuse_two_question_sets.png` and `.svg`) and alt text generated from the same numbers |
 
 ## The two tables
 
@@ -69,6 +70,15 @@ sample, and the ONS didn't link them into one series.
   as a question for the ONS.
 - **Sexual victimisation questions:** the ONS blog places them at April 2025, while note 4 to Worksheet A8 says
   October 2025. This doesn't affect the domestic abuse figures. It is unresolved, so I don't rely on either date.
+
+## The chart
+
+The old-questions series (ages 16 to 59) is a line that stops at YE March 2024, broken at its two gaps. The
+new-questions estimates (ages 16 and over) are separate points: open for the split-sample years, filled for
+the full-sample year with its 95% confidence interval. A rule marks April 2023 and the 2025/26 survey year is
+shaded. There's no trend line and no bridge anywhere. The ONS assessment is printed next to the shaded year,
+so it stays with the chart when the chart is shared without its caption. Colours are slots 1 and 2 of a
+palette validated for colour-vision deficiency, and the two series also differ by mark (line against points).
 
 ## The break in my own loads
 
