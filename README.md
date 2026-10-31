@@ -1,0 +1,87 @@
+# Domestic abuse prevalence across a survey break: verification before writing
+
+A two-table check (Python, pandas, Parquet, Jupyter) that I ran before writing about the ONS's
+year ending March 2026 domestic abuse estimates. The ONS reported a significant increase in
+domestic abuse prevalence and, in the same release, said it is too early to read it as a trend,
+because the survey changed in the same period. I wanted every figure confirmed against the ONS's
+own tables before writing a word.
+
+**Status: reconciliation gate PASSES (26 of 26 blocking checks). Tables built. No chart, no article yet.**
+
+## The ONS's assessment, which everything here is held to
+
+The YE March 2026 increase *includes real change*. Changes to the questionnaire and how the survey
+was run at the start of that year likely affected its size, by an amount that cannot yet be measured.
+Nothing in this repository estimates that amount, and nothing here suggests the increase is only a
+survey effect. The exact ONS wording is in `data/processed/ons_wording.csv`, taken from the committed
+bulletin snapshot.
+
+## Run order
+
+```
+pip install -r requirements.txt
+cd notebooks
+jupyter nbconvert --to notebook --execute --inplace 01_assemble_tables.ipynb 02_reconciliation_gate.ipynb 03_own_break.ipynb
+```
+
+`02_reconciliation_gate.ipynb` raises on any failed blocking check, so a scripted run exits non-zero.
+It writes `data/processed/gate_status.json` with hashes of the two tables. The chart (still to come)
+will refuse to run unless those hashes match.
+
+The notebooks are generated from `src/build_notebooks.py`; shared readers are in `src/common.py`.
+
+| Notebook | What it does |
+|---|---|
+| `01_assemble_tables` | source manifest with SHA-256; Table 1 (new questions) and Table 2 (old questions) as separate Parquet files |
+| `02_reconciliation_gate` | rebuilds 9.6%, 7.8%, the partner and family figures, around 4.7m and around 3.8m; checks significance flags and bulletin wording; checks the two bases can't be joined |
+| `03_own_break` | recomputes, from my Cancer Waiting Times pipeline, the rows I set aside at NHS England's October 2023 standards change |
+
+## The two tables
+
+| | Table 1: `table1_new_questions` | Table 2: `table2_old_questions` |
+|---|---|---|
+| Questions | new, first asked April 2023 | in use from April 2004 |
+| Age band | 16 and over | long run 16 to 59; a 16+ run for YE Mar 2022 to 2024 kept for reference only |
+| Years | YE Mar 2024, 2025 (split sample), 2026 (full sample) | YE Mar 2005 to YE Mar 2024, with YE Mar 2008 and 2021 as explicit gaps |
+| Intervals | published for YE Mar 2026 only (A9a) | not published in this table |
+| Source | Annual supplementary tables YE Mar 2026, A9a and A9c | Domestic abuse prevalence and victim characteristics YE Mar 2024, Tables 4 and 1b |
+
+The two tables are never stacked. The ONS states the old and new questions are not comparable: the
+new questions count someone as a victim from one abusive behaviour, in line with the Domestic Abuse Act
+2021, and cover more types of abuse. In YE March 2024 both sets were asked, to different halves of the
+sample, and the ONS didn't link them into one series.
+
+## What verification changed
+
+- **There are two breaks, not one.** The question set changed in April 2023, with a split-sample trial
+  until March 2025. In April 2025 the new questions went to everyone, on new survey software, with
+  self-completion on a tablet. The published 7.8% to 9.6% comparison is new questions against new questions;
+  it crosses the April 2025 change, not the April 2023 one.
+- **The old series is ages 16 to 59**, not 16 and over, and has its own gaps (YE Mar 2008, YE Mar 2021) and
+  part-year collections (YE Mar 2022: six months; YE Mar 2023: eight months).
+- **The December 2026 release is about the combined measure** of domestic abuse, sexual victimisation and
+  stalking (provisional 2 December 2026). The ONS has not announced a comparability evaluation for the domestic
+  abuse series itself. The domestic abuse overview is due 25 November 2026.
+- **Counts:** the ONS says counts are prevalence times the mid-year population aged 16 and over. The published
+  mid-year estimates don't reproduce the ONS's own counts (they give 3,945k for YE Mar 2025 against a
+  published 3,786k). The gate therefore rebuilds the YE Mar 2026 count from the population implied by the
+  same release's Worksheet A8 (4,670k, "around 4.7 million"). The discrepancy is recorded in `reconciliation.csv`
+  as a question for the ONS.
+- **Sexual victimisation questions:** the ONS blog places them at April 2025, while note 4 to Worksheet A8 says
+  October 2025. This doesn't affect the domestic abuse figures. It is unresolved, so I don't rely on either date.
+
+## The break in my own loads
+
+NHS England changed the cancer waiting times standards from October 2023 data, and says earlier 31-day and
+62-day statistics "are not directly comparable" with later ones. My Cancer Waiting Times pipeline loads the
+monthly combined files from April 2022 and keeps only October 2023 onwards. That sets aside 305,174 of 765,412
+provider rows (39.9%), 18 months from April 2022 to September 2023. The rows either side of the break carry
+identical standard names, so nothing in the file itself marks the break; the warning lives only on the
+publisher's page. `03_own_break` recomputes this from the pipeline's Bronze files.
+
+## Sources
+
+ONS (Crown copyright, Open Government Licence v3.0) and NHS England (Open Government Licence v3.0). Every
+file's URL and SHA-256 is in `data/processed/source_manifest.csv`. Page snapshots retrieved 31 October 2026
+are committed in `data/raw/source_pages/2026-10-31/` because what the pages said on that date is part of
+the evidence.
