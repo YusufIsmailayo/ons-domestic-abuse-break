@@ -1,3 +1,6 @@
 __pycache__/
 .ipynb_checkpoints/
 .DS_Store
+
+# Drafts, fact sheet and private correspondence: not for the public repo
+writing/
