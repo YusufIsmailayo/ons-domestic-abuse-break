@@ -6,7 +6,7 @@ domestic abuse prevalence and, in the same release, said it is too early to read
 because the survey changed in the same period. I wanted every figure confirmed against the ONS's
 own tables before writing a word.
 
-**Status: reconciliation gate PASSES (26 of 26 blocking checks). Tables and chart built. No article yet.**
+**Status: reconciliation gate PASSES (42 of 42 blocking checks). Tables and chart built. No article yet.**
 
 ## The ONS's assessment, which everything here is held to
 
@@ -66,10 +66,14 @@ sample, and the ONS didn't link them into one series.
 - **Counts:** the ONS says counts are prevalence times the mid-year population aged 16 and over. The published
   mid-year estimates don't reproduce the ONS's own counts (they give 3,945k for YE Mar 2025 against a
   published 3,786k). The gate therefore rebuilds the YE Mar 2026 count from the population implied by the
-  same release's Worksheet A8 (4,670k, "around 4.7 million"). The discrepancy is recorded in `reconciliation.csv`
-  as a question for the ONS.
+  same release's Worksheet A8 (4,670k, "around 4.7 million"). The ONS has since explained the discrepancy (email of
+  11 November 2026): its counts use a population it adjusts from the mid-year estimates for each quarter, and that
+  population isn't published. `reconciliation.csv` records this. I quote the ONS's counts rather than recompute them. The 4,670k rebuild
+  assumes the domestic abuse count uses the same base as A8's combined measure, which the ONS hasn't confirmed.
 - **Sexual victimisation questions:** the ONS blog places them at April 2025, while note 4 to Worksheet A8 says
-  October 2025. This doesn't affect the domestic abuse figures. It is unresolved, so I don't rely on either date.
+  October 2025. The ONS has confirmed both are right (email of 11 November 2026): the old questions were removed in
+  April 2025 and the new ones introduced in October 2025, with none in between. This doesn't affect the domestic
+  abuse figures.
 
 ## The chart
 

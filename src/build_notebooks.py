@@ -330,6 +330,30 @@ difference. A9c carries the test result for each.''',
 for m, expected in (("any domestic abuse", "[s]"), ("any partner abuse", "[s]"), ("any family abuse", "[ns]")):
     got = est("2026-03", m).change_vs_previous_year
     check(f"{m}: YE 2026-03 vs 2025-03 significance flag", got == expected, expected, got)''',
+    '''md:## 3b. Figures by sex
+
+The article opens on the figures for women and men, so I hold them to the same standard as the headline. The bulletin
+states them to one decimal place. I take YE March 2026 from A9a and check A9c carries the same values, take YE March 2025
+from A9c, and check the ONS's significance test for each. If a later release revises any of them, the gate stops here.''',
+    '''\
+c25 = {s: next(c for c in a9c.columns if c.startswith(f"Apr 2024 to Mar 2025 {s}")) for s in ("Women", "Men")}
+c26_sex = {s: next(c for c in a9c.columns if c.startswith(f"Apr 2025 to Mar 2026 {s}")) for s in ("Women", "Men")}
+sig = {s: next(c for c in a9c.columns if "statistically significant difference" in c and c.endswith(f" {s}"))
+       for s in ("Women", "Men")}
+
+# Published in the bulletin text: (YE March 2025, YE March 2026). All four rises are reported as significant.
+BY_SEX = {("Any domestic abuse", "Women"): (9.1, 11.5), ("Any domestic abuse", "Men"): (6.5, 7.6),
+          ("Any partner abuse", "Women"): (7.3, 9.5), ("Any partner abuse", "Men"): (4.9, 6.3)}
+for (label, sex), (pub25, pub26) in BY_SEX.items():
+    v26 = float(row(a9a, label)[f"{sex} in the last year Estimate"])
+    v26c = float(row(a9c, label)[c26_sex[sex]])
+    v25 = float(row(a9c, label)[c25[sex]])
+    flag = str(row(a9c, label)[sig[sex]]).strip()
+    name = f"{label.lower()}, {sex.lower()}"
+    check(f"{name}, YE 2026-03, rounds to bulletin figure", round(v26, 1) == pub26, pub26, f"{v26:.4f}")
+    check(f"{name}, YE 2026-03: A9a and A9c agree", v26 == v26c, f"{v26:.10f}", f"{v26c:.10f}")
+    check(f"{name}, YE 2025-03, rounds to bulletin figure", round(v25, 1) == pub25, pub25, f"{v25:.4f}")
+    check(f"{name}: YE 2026-03 vs 2025-03 significance flag", flag == "[s]", "[s]", flag)''',
     '''md:## 4. Counts
 
 The ONS's note says counts are "derived by multiplying the prevalence rate by the population aged 16 years and
@@ -365,7 +389,7 @@ check("YE 2026-03 count rebuilt from A8's population rounds to 'around 4.7 milli
 denominator25_k = count25_k / (est("2025-03", "any domestic abuse").estimate_pct / 100)
 print(f"\\nPopulation implied by the ONS's own counts: YE 2025-03 {denominator25_k:,.0f}k, YE 2026-03 {denominator_k:,.0f}k")
 print(f"Difference between the two published counts: {count26_k - count25_k:,.0f}k, of which about "
-      f"{rate26 / 100 * (denominator_k - denominator25_k):,.0f}k comes from the larger population base alone")''',
+      f"{rate26 / 100 * (denominator_k - denominator25_k):,.0f}k comes from the larger population base alone (assumes the domestic abuse count uses A8's population base, which the ONS hasn't confirmed)")''',
     '''md:### 4b. What the published mid-year estimates give (informational)
 
 I record this, but it doesn't block the gate. Summing single years of age 16 and over from MYE2 gives a population
@@ -379,10 +403,10 @@ mye25_k = est("2025-03", "any domestic abuse").estimate_pct / 100 * pop24 / 1000
 mye26_k = rate26 / 100 * pop25 / 1000
 check("MYE mid-2024 16+ method reproduces the YE 2025-03 published count", abs(mye25_k - count25_k) < 1,
       f"{count25_k:,.0f}k", f"{mye25_k:,.0f}k (population {pop24:,})", blocking=False,
-      note="documented discrepancy: ask ONS which population base the counts use")
+      note="explained by the ONS (email, 11 Nov 2026): counts use an adjusted population base that isn't published")
 check("MYE mid-2025 16+ method reproduces 'around 4.7 million'", round(mye26_k / 1000, 1) == 4.7, 4.7,
       f"{mye26_k:,.0f}k (population {pop25:,})", blocking=False,
-      note="documented discrepancy: ask ONS which population base the counts use")''',
+      note="explained by the ONS (email, 11 Nov 2026): counts use an adjusted population base that isn't published")''',
     '''md:## 5. The bulletin snapshot says what the tables say
 
 These are the exact phrases in the committed snapshot of the bulletin (retrieved 31 October 2026). I also keep

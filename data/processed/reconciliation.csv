@@ -14,10 +14,26 @@ any domestic abuse YE 2025-03: unchanged since the YE March 2025 edition,False,T
 any domestic abuse: YE 2026-03 vs 2025-03 significance flag,True,True,[s],[s],
 any partner abuse: YE 2026-03 vs 2025-03 significance flag,True,True,[s],[s],
 any family abuse: YE 2026-03 vs 2025-03 significance flag,True,True,[ns],[ns],
+"any domestic abuse, women, YE 2026-03, rounds to bulletin figure",True,True,11.5,11.4831,
+"any domestic abuse, women, YE 2026-03: A9a and A9c agree",True,True,11.4830705677,11.4830705677,
+"any domestic abuse, women, YE 2025-03, rounds to bulletin figure",True,True,9.1,9.0875,
+"any domestic abuse, women: YE 2026-03 vs 2025-03 significance flag",True,True,[s],[s],
+"any domestic abuse, men, YE 2026-03, rounds to bulletin figure",True,True,7.6,7.6102,
+"any domestic abuse, men, YE 2026-03: A9a and A9c agree",True,True,7.6101603385,7.6101603385,
+"any domestic abuse, men, YE 2025-03, rounds to bulletin figure",True,True,6.5,6.4981,
+"any domestic abuse, men: YE 2026-03 vs 2025-03 significance flag",True,True,[s],[s],
+"any partner abuse, women, YE 2026-03, rounds to bulletin figure",True,True,9.5,9.4858,
+"any partner abuse, women, YE 2026-03: A9a and A9c agree",True,True,9.4857842982,9.4857842982,
+"any partner abuse, women, YE 2025-03, rounds to bulletin figure",True,True,7.3,7.3112,
+"any partner abuse, women: YE 2026-03 vs 2025-03 significance flag",True,True,[s],[s],
+"any partner abuse, men, YE 2026-03, rounds to bulletin figure",True,True,6.3,6.3165,
+"any partner abuse, men, YE 2026-03: A9a and A9c agree",True,True,6.3164820226,6.3164820226,
+"any partner abuse, men, YE 2025-03, rounds to bulletin figure",True,True,4.9,4.9283,
+"any partner abuse, men: YE 2026-03 vs 2025-03 significance flag",True,True,[s],[s],
 YE 2025-03 count rounds to 'around 3.8 million',True,True,3.8,"3,786k",
 YE 2026-03 count rebuilt from A8's population rounds to 'around 4.7 million',True,True,4.7,"4,670k (range 4,670k to 4,671k)","population implied by A8: 48,735k aged 16+"
-MYE mid-2024 16+ method reproduces the YE 2025-03 published count,False,False,"3,786k","3,945k (population 50,492,073)",documented discrepancy: ask ONS which population base the counts use
-MYE mid-2025 16+ method reproduces 'around 4.7 million',False,False,4.7,"4,881k (population 50,936,305)",documented discrepancy: ask ONS which population base the counts use
+MYE mid-2024 16+ method reproduces the YE 2025-03 published count,False,False,"3,786k","3,945k (population 50,492,073)","explained by the ONS (email, 11 Nov 2026): counts use an adjusted population base that isn't published"
+MYE mid-2025 16+ method reproduces 'around 4.7 million',False,False,4.7,"4,881k (population 50,936,305)","explained by the ONS (email, 11 Nov 2026): counts use an adjusted population base that isn't published"
 bulletin snapshot contains: headline 9.6% and count,True,True,present,present,
 bulletin snapshot contains: previous year 7.8% and count,True,True,present,present,
 bulletin snapshot contains: partner abuse 7.9% vs 6.1%,True,True,present,present,
