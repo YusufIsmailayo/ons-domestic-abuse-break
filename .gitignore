@@ -4,3 +4,20 @@ __pycache__/
 
 # Drafts, fact sheet and private correspondence: not for the public repo
 writing/
+
+# --- Never commit: secrets, working notes, drafts, private folders ---
+.env
+.env.*
+*.pem
+*.key
+credentials*.json
+token*.json
+.streamlit/secrets.toml
+HANDOFF*.md
+*handoff*
+social/
+Claude outputs/
+drafts/
+article/
+_local/
+outreach/
