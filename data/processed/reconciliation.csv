@@ -47,3 +47,19 @@ long-run old series runs YE 2005-03 to YE 2024-03,True,True,"('2005-03', '2024-0
 YE 2008-03 and 2021-03 kept as gaps with no estimate,True,True,"['2008-03', '2021-03']","['2008-03', '2021-03']",
 "last old-questions estimate (16 to 59, YE 2024-03) as published",True,True,5.35,5.3514,
 old series unchanged between the YE 2023 and YE 2024 editions,False,True,0,max diff 0.00e+00,
+"any domestic abuse, YE 2025-03: unchanged in the YE March 2026 edition",True,True,7.8137481969,7.8137481969,"Table 2, retrieved 2026-11-26"
+"any partner abuse, YE 2025-03: unchanged in the YE March 2026 edition",True,True,6.1374775565,6.1374775565,"Table 2, retrieved 2026-11-26"
+"any family abuse, YE 2025-03: unchanged in the YE March 2026 edition",True,True,2.6774771407,2.6774771407,"Table 2, retrieved 2026-11-26"
+"any domestic abuse, YE 2026-03: unchanged in the YE March 2026 edition",True,True,9.5828361370,9.5828361370,"Table 2, retrieved 2026-11-26"
+"any partner abuse, YE 2026-03: unchanged in the YE March 2026 edition",True,True,7.9303470298,7.9303470298,"Table 2, retrieved 2026-11-26"
+"any family abuse, YE 2026-03: unchanged in the YE March 2026 edition",True,True,2.8183431703,2.8183431703,"Table 2, retrieved 2026-11-26"
+"any domestic abuse, women, YE 2025-03: unchanged in the YE March 2026 edition",True,True,9.0874633428,9.0874633428,"Table 2, retrieved 2026-11-26"
+"any domestic abuse, women, YE 2026-03: unchanged in the YE March 2026 edition",True,True,11.4830705677,11.4830705677,"Table 2, retrieved 2026-11-26"
+"any domestic abuse, men, YE 2025-03: unchanged in the YE March 2026 edition",True,True,6.4980676920,6.4980676920,"Table 2, retrieved 2026-11-26"
+"any domestic abuse, men, YE 2026-03: unchanged in the YE March 2026 edition",True,True,7.6101603385,7.6101603385,"Table 2, retrieved 2026-11-26"
+"any partner abuse, women, YE 2025-03: unchanged in the YE March 2026 edition",True,True,7.3112014577,7.3112014577,"Table 2, retrieved 2026-11-26"
+"any partner abuse, women, YE 2026-03: unchanged in the YE March 2026 edition",True,True,9.4857842982,9.4857842982,"Table 2, retrieved 2026-11-26"
+"any partner abuse, men, YE 2025-03: unchanged in the YE March 2026 edition",True,True,4.9282735983,4.9282735983,"Table 2, retrieved 2026-11-26"
+"any partner abuse, men, YE 2026-03: unchanged in the YE March 2026 edition",True,True,6.3164820226,6.3164820226,"Table 2, retrieved 2026-11-26"
+"any domestic abuse, YE 2024-03: unchanged in the YE March 2026 edition",True,True,8.0035876998,8.0035876998,"Table 2, retrieved 2026-11-26"
+YE 2026-03 count now published (Table 3) matches the rebuild from A8's population,True,True,"4,670k","4,670k",confirms the domestic abuse count uses the same population base as A8

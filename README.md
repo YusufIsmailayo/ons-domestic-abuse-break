@@ -6,7 +6,8 @@ domestic abuse prevalence and, in the same release, said it is too early to read
 because the survey changed in the same period. I wanted every figure confirmed against the ONS's
 own tables before writing a word.
 
-**Status: reconciliation gate PASSES (42 of 42 blocking checks). Tables and chart built. No article yet.**
+**Status: reconciliation gate PASSES (58 of 58 blocking checks), re-checked on 26 November 2026 against the ONS's
+25 November release: no figure revised. Tables and chart built. No article yet.**
 
 ## The ONS's assessment, which everything here is held to
 
@@ -33,7 +34,7 @@ The notebooks are generated from `src/build_notebooks.py`; shared readers are in
 | Notebook | What it does |
 |---|---|
 | `01_assemble_tables` | source manifest with SHA-256; Table 1 (new questions) and Table 2 (old questions) as separate Parquet files |
-| `02_reconciliation_gate` | rebuilds 9.6%, 7.8%, the partner and family figures, around 4.7m and around 3.8m; checks significance flags and bulletin wording; checks the two bases can't be joined |
+| `02_reconciliation_gate` | rebuilds 9.6%, 7.8%, the partner and family figures, around 4.7m and around 3.8m; checks significance flags and bulletin wording; checks the two bases can't be joined; fails on any revision in the YE March 2026 edition of the domestic abuse tables (25 November 2026) |
 | `03_own_break` | recomputes, from my Cancer Waiting Times pipeline, the rows I set aside at NHS England's October 2023 standards change |
 | `04_chart` | the article's chart (`charts/domestic_abuse_two_question_sets.png` and `.svg`) and alt text generated from the same numbers |
 
@@ -69,7 +70,9 @@ sample, and the ONS didn't link them into one series.
   same release's Worksheet A8 (4,670k, "around 4.7 million"). The ONS has since explained the discrepancy (email of
   11 November 2026): its counts use a population it adjusts from the mid-year estimates for each quarter, and that
   population isn't published. `reconciliation.csv` records this. I quote the ONS's counts rather than recompute them. The 4,670k rebuild
-  assumes the domestic abuse count uses the same base as A8's combined measure, which the ONS hasn't confirmed.
+  assumed the domestic abuse count uses the same base as A8's combined measure. The YE March 2026 edition of the
+  domestic abuse tables (25 November 2026) now publishes the count, 4,670k, which matches the rebuild, so the
+  assumption holds. The gate checks this.
 - **Sexual victimisation questions:** the ONS blog places them at April 2025, while note 4 to Worksheet A8 says
   October 2025. The ONS has confirmed both are right (email of 11 November 2026): the old questions were removed in
   April 2025 and the new ones introduced in October 2025, with none in between. This doesn't affect the domestic
@@ -98,4 +101,6 @@ publisher's page. `03_own_break` recomputes this from the pipeline's Bronze file
 ONS (Crown copyright, Open Government Licence v3.0) and NHS England (Open Government Licence v3.0). Every
 file's URL and SHA-256 is in `data/processed/source_manifest.csv`. Page snapshots retrieved 31 October 2026
 are committed in `data/raw/source_pages/2026-10-31/` because what the pages said on that date is part of
-the evidence.
+the evidence. Snapshots of the 25 November 2026 release (the overview bulletin, the prevalence and trends
+article, the research update, the release and dataset pages) were retrieved on 26 November 2026 and are in
+`data/raw/source_pages/2026-11-26/`.

@@ -50,6 +50,29 @@ SOURCES = {
         "mid20252023localauthorityboundaries/mye25tablesew.xlsx",
 }
 
+# Added when I re-checked against the ONS's 25 November 2026 release. I keep them apart from the October files
+# because they were retrieved on a different date, and the manifest records each file's own retrieval date.
+RECHECKED = "2026-11-26"
+PAGES_RECHECK = RAW / "source_pages" / RECHECKED
+RECHECK_SOURCES = {
+    "ons_tables/domesticabuseprevalenceandvictimcharacteristics_yemar2026.xlsx":
+        "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/crimeandjustice/datasets/"
+        "domesticabuseprevalenceandvictimcharacteristicsappendixtables/yearendingmarch2026/"
+        "domesticabuseprevalenceandvictimcharacteristics2026.xlsx",
+}
+RECHECK_PAGE_SOURCES = {
+    "ons_release_da_overview_november2026.html":
+        "https://www.ons.gov.uk/releases/domesticabuseinenglandandwalesoverviewnovember2026",
+    "ons_bulletin_da_overview_november2026.html":
+        "https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/bulletins/domesticabuseinenglandandwalesoverview/november2026",
+    "ons_article_da_prevalence_trends_yemar2026.html":
+        "https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/articles/domesticabuseprevalenceandtrendsenglandandwales/yearendingmarch2026",
+    "ons_article_redevelopment_da_statistics_november2026.html":
+        "https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/articles/redevelopmentofdomesticabusestatistics/november2026",
+    "ons_dataset_da_prevalence_victim_characteristics.html":
+        "https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/datasets/domesticabuseprevalenceandvictimcharacteristicsappendixtables",
+}
+
 PAGE_SOURCES = {
     "ons_bulletin_crime_ew_yejune2026.html":
         "https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/bulletins/crimeinenglandandwales/yearendingjune2026",

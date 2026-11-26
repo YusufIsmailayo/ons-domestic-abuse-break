@@ -71,6 +71,16 @@ manifest = pd.DataFrame(
         "retrieved": RETRIEVED, "bytes": (PAGES / name).stat().st_size, "sha256": sha256(PAGES / name)}
        for name, url in PAGE_SOURCES.items()]
 )
+
+# Files from my re-check against the 25 November 2026 release, each with its own retrieval date.
+from common import PAGES_RECHECK, RECHECK_PAGE_SOURCES, RECHECK_SOURCES, RECHECKED
+manifest = pd.concat([manifest, pd.DataFrame(
+    [{"path": f"data/raw/{rel}", "kind": "table", "source_url": url, "retrieved": RECHECKED,
+      "bytes": (RAW / rel).stat().st_size, "sha256": sha256(RAW / rel)} for rel, url in RECHECK_SOURCES.items()]
+    + [{"path": f"data/raw/source_pages/{RECHECKED}/{name}", "kind": "page snapshot", "source_url": url,
+        "retrieved": RECHECKED, "bytes": (PAGES_RECHECK / name).stat().st_size, "sha256": sha256(PAGES_RECHECK / name)}
+       for name, url in RECHECK_PAGE_SOURCES.items()]
+)], ignore_index=True)
 manifest.to_parquet(PROCESSED / "source_manifest.parquet", index=False)
 manifest.to_csv(PROCESSED / "source_manifest.csv", index=False)
 manifest.assign(sha256=manifest.sha256.str[:16])[["path", "kind", "bytes", "sha256"]]''',
@@ -465,6 +475,65 @@ for c in t4_23.columns[1:]:
         diffs.append(abs(float(r23[c]) - float(now.iloc[0])))
 check("old series unchanged between the YE 2023 and YE 2024 editions", max(diffs) < 1e-9, 0, f"max diff {max(diffs):.2e}",
       blocking=False)''',
+    '''md:## 7. The YE March 2026 edition of the domestic abuse tables (published 25 November 2026)
+
+The ONS published a new edition of *Domestic abuse prevalence and victim characteristics* with its November overview.
+Its Table 2 carries the new-questions series for YE March 2024 to 2026. I check every figure the gate already holds
+against it at full precision. Any difference is a revision, and a revision fails the gate: the article must not
+go out on a number the ONS has since changed.
+
+The new edition names some rows and columns differently ("Partner abuse" rather than "Any partner abuse", "Female"
+and "Male" rather than "Women" and "Men"), so I map the labels explicitly rather than match loosely.
+
+Its Table 3 also publishes the YE March 2026 count for the first time. Section 4 rebuilt that count from Worksheet A8's
+population, on the assumption that the domestic abuse count uses the same population base. If the published count
+matches the rebuild, the assumption holds.''',
+    '''\
+from common import RECHECKED
+
+DAPVC26 = TABLES / "domesticabuseprevalenceandvictimcharacteristics_yemar2026.xlsx"
+t2_26 = read_sheet(DAPVC26, "Table 2", "Type of abuse")
+t3_26 = read_sheet(DAPVC26, "Table 3", "Type of abuse")
+
+# The gate's names -> the labels the new edition uses.
+NEW_LABEL = {"any domestic abuse": "Any domestic abuse", "any partner abuse": "Partner abuse",
+             "any family abuse": "Family abuse", "Any domestic abuse": "Any domestic abuse",
+             "Any partner abuse": "Partner abuse"}
+NEW_SEX = {"All": "All", "Women": "Female", "Men": "Male"}
+PERIOD = {"2024-03": "Apr 2023 to Mar 2024", "2025-03": "Apr 2024 to Mar 2025", "2026-03": "Apr 2025 to Mar 2026"}
+TOL = 1e-9
+
+
+def new_edition(label, year_ending, sex="All"):
+    prefix = f"{PERIOD[year_ending]} {NEW_SEX[sex]}"
+    col = next(c for c in t2_26.columns if c.startswith(prefix))
+    return float(row(t2_26, NEW_LABEL[label])[col])
+
+
+def unchanged(name, held, new):
+    check(f"{name}: unchanged in the YE March 2026 edition", abs(new - held) < TOL, f"{held:.10f}", f"{new:.10f}",
+          note=f"Table 2, retrieved {RECHECKED}")
+
+
+for ye in ("2025-03", "2026-03"):
+    for m in ("any domestic abuse", "any partner abuse", "any family abuse"):
+        unchanged(f"{m}, YE {ye}", est(ye, m).estimate_pct, new_edition(m, ye))
+
+for (label, sex) in BY_SEX:
+    name = f"{label.lower()}, {sex.lower()}"
+    unchanged(f"{name}, YE 2025-03", float(row(a9c, label)[c25[sex]]), new_edition(label, "2025-03", sex))
+    unchanged(f"{name}, YE 2026-03", float(row(a9a, label)[f"{sex} in the last year Estimate"]),
+              new_edition(label, "2026-03", sex))
+
+unchanged("any domestic abuse, YE 2024-03", est("2024-03", "any domestic abuse").estimate_pct,
+          new_edition("any domestic abuse", "2024-03"))
+
+any26 = t3_26[(t3_26.iloc[:, 0] == "Any domestic abuse") & (t3_26.Sex == "All")].iloc[0]
+published26_k = float(any26["Victims in the last year (000s)"])
+# The published count is rounded to the nearest thousand; the rebuild has a small range from A8's own rounding.
+check("YE 2026-03 count now published (Table 3) matches the rebuild from A8's population",
+      min(count_range) - 0.5 <= published26_k <= max(count_range) + 0.5, f"{count26_k:,.0f}k",
+      f"{published26_k:,.0f}k", note="confirms the domestic abuse count uses the same population base as A8")''',
     '''md:## Verdict''',
     '''\
 recon = pd.DataFrame(results)
